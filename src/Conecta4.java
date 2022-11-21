@@ -4,6 +4,7 @@ public class Conecta4 {
 
     private Tablero tablero = new Tablero();
     private Turno turno = new Turno();
+    private Victoria victoria = new Victoria();
     public final static Scanner sc = new Scanner(System.in);
     public final static Scanner scanner = new Scanner(System.in);
 
@@ -28,7 +29,9 @@ public class Conecta4 {
             }while((columna < 1 || columna > 7) || tablero.columnaLlena(columna));
 
             tablero.ponerFicha(columna, turno.getFichas());
-
+            if(victoria.haGanado(tablero,turno)){
+                System.out.println("HA GANADO!!! " + turno.getJugador());
+            }
             turno.nextTurno();
 
             System.out.println(" -----------------------------");
