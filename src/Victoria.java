@@ -18,51 +18,101 @@ public class Victoria {
         this.victoria = v;
     }
 
-    public boolean haGanado(Tablero tablero) {
-        haGanadoVert(tablero);
-        //haGanadoHor(tablero);
+    public boolean haGanado(Turno turno,Tablero tablero) {
+        return haGanadoVert(turno,tablero) || haGanadoHor(turno,tablero) ||
+                haGanadoDiagDer(turno,tablero) || haGanadoDiagIzq(turno,tablero);
+    }
+
+    /** haGanadoVert
+     * VERIFICA LAS COLUMNAS DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
+     * @param turno Determina cuál ficha verificar.
+     * @param tablero El tablero en sí
+     * @return Un booleano si se cumple la condición o no.
+     */
+
+    private boolean haGanadoVert(Turno turno,Tablero tablero){
+        boolean victoria = false;
+        String[] corte = new String[6];
+        for(int i=0;i<COL;i++){
+            for(int j=0; j<FIL; j++){
+                corte[i].equals(tablero.getPosicion(i,j));
+            }
+            if(verifCorte(corte,6,turno))
+                victoria = true;
+        }
         return victoria;
     }
 
-    private void haGanadoVert(Tablero tablero) {
-        String[] fichas = new String[4];
-
-        for(int i = 0; i < COL && !this.victoria; i++){
-            for(int j = 0; j < FIL && !this.victoria; j++){
-                actualizarArray(fichas, tablero.getPosicion(i, j));
-                setVictoria(comprobarArray(fichas, tablero.getPosicion(i, j)));
+    /** haGanadoHorz
+     * VERIFICA LAS FILAS DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
+     * @param turno Determina cuál ficha verificar.
+     * @param tablero El tablero en sí
+     * @return Un booleano si se cumple la condición o no.
+     */
+    private boolean haGanadoHor(Turno turno,Tablero tablero){
+        boolean victoria = false;
+        String[] corte = new String[7];
+        for(int i=0; i<FIL; i++){
+            for(int j=0; j<COL; j++){
+                corte[i].equals(tablero.getPosicion(i,j));
             }
+            if(verifCorte(corte,7,turno))
+                victoria = true;
         }
+        return victoria;
     }
 
-    /*private void haGanadoHor(Tablero tablero) {
-        String[] fichas = new String[4];
-        for(int i = 0; i < FIL; i++){
-            for(int j = 0; j < COL; j++){
-                actualizarArray(fichas);
-                fichas[0] = turno.getFichas();
-                victoria = comprobarArray(fichas, turno.getFichas());
-            }
-        }
-    }*/
+    /** haGanadoDiagDer
+     * VERIFICA LAS DIAGONALES TIPO \ DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
+     * @param turno Determina cuál ficha verificar.
+     * @param tablero El tablero en sí
+     * @return Un booleano si se cumple la condición o no.
+     */
 
-    private boolean comprobarArray(String[] fichas, String ficha) {
-        boolean iguales = true;
-            for(int i = 0; i < fichas.length-1 && iguales; i ++){
-                if(fichas[i] != ficha){
-                    iguales = false;
-                }
-            /*if (!Objects.equals(fichas[i], fichas[i + 1])) { //fichas[i] != fichas[i+1]
-                iguales = false;
-            }*/
+    private boolean haGanadoDiagDer(Turno turno,Tablero tablero){
+        boolean victoria = false;
+        String[] corte = new String[4];
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                corte[i].equals(tablero.getPosicion(i+j,j));
             }
-        return iguales;
+            if(verifCorte(corte,4,turno))
+                victoria = true;
+        }
+        return victoria;
     }
 
-    private void actualizarArray(String[] fichas, String ficha) {
-        for(int i = 0; i < fichas.length-1; i ++){
-            fichas[i+1] = fichas[i];
+    /** haGanadoDiagIzq
+     * VERIFICA LAS DIAGONALES TIPO / DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
+     * @param turno Determina cuál ficha verificar.
+     * @param tablero El tablero en sí
+     * @return Un booleano si se cumple la condición o no.
+     */
+
+    private boolean haGanadoDiagIzq(Turno turno,Tablero tablero){
+        boolean victoria = false;
+        String[] corte = new String[4];
+        for(int i=COL; i>2; i--){
+            for(int j=0; j<3; j++){
+                corte[i].equals(tablero.getPosicion(i-j,j));
+            }
+            if(verifCorte(corte,4,turno))
+                victoria = true;
         }
-        fichas[0] = ficha;
+        return victoria;
+    }
+
+    private boolean verifCorte (String[] corte,int tamanio, Turno turno){
+        boolean victoria = false;
+        int cont = 0;
+        for(int i=0; i< tamanio; i++){
+            if(corte[i].equals(turno.getFichas())){
+                cont++;
+            }else
+                cont = 0;
+            if(cont == 4)
+                victoria = true;
+        }
+        return victoria;
     }
 }
