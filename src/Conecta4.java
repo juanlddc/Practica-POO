@@ -35,13 +35,13 @@ public class Conecta4 {
             System.out.print(tablero);
             System.out.println(" -----------------------------");
 
-            /*if(victoria.haGanado(tablero)){
+            if(victoria.haGanado(turno, tablero)){
                 System.out.println("HA GANADO!!! " + turno.getJugador());
-            }*/
+            }
 
             turno.nextTurno();
 
-        }while(!tablero.full());// && !victoria.getVictoria());
+        }while(!tablero.full());// && !victoria.getVictoria();
     }
 
     public static void main(String[] args) throws ColumnaCompleta, ColumnaNoValida {
@@ -49,7 +49,6 @@ public class Conecta4 {
         String seguir;
         do{
             partida.jugar();
-            //System.out.println("TIED!!!");
             do{
                 System.out.print("Do you want to continue? (s/n): ");
                 seguir = scanner.nextLine();

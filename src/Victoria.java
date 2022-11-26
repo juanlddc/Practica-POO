@@ -2,11 +2,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Victoria {
-    private boolean victoria;
+    //private boolean victoria;
     private final int COL = 7;
     private final int FIL = 6;
 
-    public Victoria(){
+    /*public Victoria(){
         this.victoria = false;
     }
 
@@ -16,11 +16,11 @@ public class Victoria {
 
     public void setVictoria(boolean v) {
         this.victoria = v;
-    }
+    }*/
 
     public boolean haGanado(Turno turno,Tablero tablero) {
-        return haGanadoVert(turno,tablero) || haGanadoHor(turno,tablero) ||
-                haGanadoDiagDer(turno,tablero) || haGanadoDiagIzq(turno,tablero);
+        return haGanadoVert(turno,tablero);/*|| haGanadoHor(turno,tablero) ||
+                haGanadoDiagDer(turno,tablero) || haGanadoDiagIzq(turno,tablero);*/
     }
 
     /** haGanadoVert
@@ -33,11 +33,25 @@ public class Victoria {
     private boolean haGanadoVert(Turno turno,Tablero tablero){
         boolean victoria = false;
         String[] corte = new String[6];
-        for(int i=0;i<COL;i++){
-            for(int j=0; j<FIL; j++){
-                corte[i].equals(tablero.getPosicion(i,j));
+        for(int i=0; i<COL-1 && !victoria; i++){
+            for(int j=0; j<FIL-1; j++){
+                corte[i] = tablero.getPosicion(i,j);
             }
             if(verifCorte(corte,6,turno))
+                victoria = true;
+        }
+        return victoria;
+    }
+
+    private boolean verifCorte (String[] corte,int tamanio, Turno turno){
+        boolean victoria = false;
+        int cont = 0;
+        for(int i=0; i<tamanio && !victoria; i++){
+            if(corte[i] == turno.getFichas()){
+                cont++;
+            }else
+                cont = 0;
+            if(cont == 4)
                 victoria = true;
         }
         return victoria;
@@ -97,20 +111,6 @@ public class Victoria {
                 corte[i].equals(tablero.getPosicion(i-j,j));
             }
             if(verifCorte(corte,4,turno))
-                victoria = true;
-        }
-        return victoria;
-    }
-
-    private boolean verifCorte (String[] corte,int tamanio, Turno turno){
-        boolean victoria = false;
-        int cont = 0;
-        for(int i=0; i< tamanio; i++){
-            if(corte[i].equals(turno.getFichas())){
-                cont++;
-            }else
-                cont = 0;
-            if(cont == 4)
                 victoria = true;
         }
         return victoria;
