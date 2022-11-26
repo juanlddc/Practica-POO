@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Victoria {
@@ -17,28 +18,28 @@ public class Victoria {
         this.victoria = v;
     }
 
-    public boolean haGanado(Tablero tablero, Turno turno) {
-        haGanadoVert(tablero, turno);
-        //haGanadoHor(tablero, turno);
+    public boolean haGanado(Tablero tablero) {
+        haGanadoVert(tablero);
+        //haGanadoHor(tablero);
         return victoria;
     }
 
-    private void haGanadoVert(Tablero tablero, Turno turno) {
-        String[] fichas = new String[3];
-        for(int i = 0; i < COL; i++){
-            for(int j = 0; j < FIL; j++){
-                actualizarArray(fichas, turno.getFichas());
-                fichas[0] = turno.getFichas();
-                victoria = comprobarArray(fichas, turno.getFichas());
+    private void haGanadoVert(Tablero tablero) {
+        String[] fichas = new String[4];
+
+        for(int i = 0; i < COL && !this.victoria; i++){
+            for(int j = 0; j < FIL && !this.victoria; j++){
+                actualizarArray(fichas, tablero.getPosicion(i, j));
+                setVictoria(comprobarArray(fichas, tablero.getPosicion(i, j)));
             }
         }
     }
 
-    /*private void haGanadoHor(Tablero tablero, Turno turno) {
+    /*private void haGanadoHor(Tablero tablero) {
         String[] fichas = new String[4];
         for(int i = 0; i < FIL; i++){
             for(int j = 0; j < COL; j++){
-                actualizarArray(fichas, turno.getFichas());
+                actualizarArray(fichas);
                 fichas[0] = turno.getFichas();
                 victoria = comprobarArray(fichas, turno.getFichas());
             }
@@ -47,12 +48,14 @@ public class Victoria {
 
     private boolean comprobarArray(String[] fichas, String ficha) {
         boolean iguales = true;
-
-        for(int i = 0; i < fichas.length-1; i ++){
-            if(!Objects.equals(fichas[i], ficha)){ //fichas[i] != ficha
+            for(int i = 0; i < fichas.length-1 && iguales; i ++){
+                if(fichas[i] != ficha){
+                    iguales = false;
+                }
+            /*if (!Objects.equals(fichas[i], fichas[i + 1])) { //fichas[i] != fichas[i+1]
                 iguales = false;
+            }*/
             }
-        }
         return iguales;
     }
 
@@ -60,5 +63,6 @@ public class Victoria {
         for(int i = 0; i < fichas.length-1; i ++){
             fichas[i+1] = fichas[i];
         }
+        fichas[0] = ficha;
     }
 }

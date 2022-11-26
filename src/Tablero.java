@@ -37,18 +37,6 @@ public class Tablero {
         }else tablero[col][fila] = valor;
     }
 
-    /**
-     * public int ponerFicha(int columna,String ficha){
-     *         if(!columnaLlena(columna)){
-     *             this.tablero[(ROW - 1) - getOcupacion(columna)][columna].setDato(ficha);
-     *             return 1;                                                   //Éxito
-     *         }else{
-     *             return 0;                                                   //Sin éxito, levantar excepción
-     *         }
-     *     }
-     * @return
-     */
-
     public int ocupacion() {
         int libre = 0;
         for(int i = 0; i < FIL; i++){
