@@ -49,9 +49,9 @@ public class Victoria {
      */
     private boolean haGanadoHor(Turno turno,Tablero tablero){
         String[] corte = new String[COL];
-        for(int i=0; i < FIL-1 && !this.victoria; i++){
-            for(int j=0; j < COL-1; j++){
-                corte[j] = tablero.getPosicion(i,j);
+        for(int i=0; i < FIL && !this.victoria; i++){
+            for(int j=0; j < COL; j++){
+                corte[j] = tablero.getPosicion(j,i);
             }
             setVictoria(verifCorte(corte, COL, turno));
         }
@@ -65,18 +65,19 @@ public class Victoria {
      * @return Un booleano si se cumple la condición o no.
      */
 
-    private boolean haGanadoDiagDer(Turno turno,Tablero tablero){
-        boolean victoria = false;
-        String[] corte = new String[4];
-        for(int i=0; i<4; i++){
-            for(int j=0; j<4; j++){
-                corte[i] = tablero.getPosicion(i+j,j);
-            }
-            if(verifCorte(corte,4,turno))
-                victoria = true;
-        }
-        return victoria;
+    private boolean haGanadoDiagDer(Turno turno,Tablero tablero) {
     }
+
+    /*boolean victoria = false;
+    String[] corte = new String[4];
+        for(int i=0; i<4; i++){
+        for(int j=0; j<4; j++){
+            corte[i] = tablero.getPosicion(i+j,j);
+        }
+        if(verifCorte(corte,4,turno))
+            victoria = true;
+    }
+        return victoria;*/
 
     /** haGanadoDiagIzq
      * VERIFICA LAS DIAGONALES TIPO / DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
