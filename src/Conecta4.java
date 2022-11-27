@@ -12,6 +12,7 @@ public class Conecta4 {
     public void jugar() throws ColumnaNoValida, ColumnaCompleta {
         System.out.println("------ CONECTA 4 ------");
         tablero.iniciarTablero();
+        reiniciarV();
         System.out.println(tablero);
         do{
             int columna;
@@ -41,7 +42,11 @@ public class Conecta4 {
 
             turno.nextTurno();
 
-        }while(!tablero.full());// && !victoria.getVictoria();
+        }while(!tablero.full() && !victoria.getVictoria());
+    }
+
+    public void reiniciarV() {
+        this.victoria.setVictoria(false);
     }
 
     public static void main(String[] args) throws ColumnaCompleta, ColumnaNoValida {

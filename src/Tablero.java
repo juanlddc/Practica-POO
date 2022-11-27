@@ -1,7 +1,5 @@
 public class Tablero {
     private String[][] tablero;
-
-    //HACER COL Y FIL ATRIBUTO PARA PODER UTILIZARLOS EN OTRAS CLASES?
     private final int COL = 7;
     private final int FIL = 6;
 

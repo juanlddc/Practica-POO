@@ -2,11 +2,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Victoria {
-    //private boolean victoria;
+    private boolean victoria;
     private final int COL = 7;
     private final int FIL = 6;
 
-    /*public Victoria(){
+    public Victoria(){
         this.victoria = false;
     }
 
@@ -16,11 +16,11 @@ public class Victoria {
 
     public void setVictoria(boolean v) {
         this.victoria = v;
-    }*/
+    }
 
     public boolean haGanado(Turno turno,Tablero tablero) {
-        return haGanadoVert(turno,tablero);/*|| haGanadoHor(turno,tablero) ||
-                haGanadoDiagDer(turno,tablero) || haGanadoDiagIzq(turno,tablero);*/
+        setVictoria(haGanadoVert(turno,tablero) ||  haGanadoHor(turno, tablero));// || haGanadoDiagDer(turno,tablero)) || haGanadoDiagIzq(turno,tablero));
+        return victoria;
     }
 
     /** haGanadoVert
@@ -31,30 +31,14 @@ public class Victoria {
      */
 
     private boolean haGanadoVert(Turno turno,Tablero tablero){
-        boolean victoria = false;
-        String[] corte = new String[6];
-        for(int i=0; i<COL-1 && !victoria; i++){
-            for(int j=0; j<FIL-1; j++){
-                corte[i] = tablero.getPosicion(i,j);
+        String[] corte = new String[FIL];
+        for(int i = 0; i < COL && !this.victoria; i++){
+            for(int j = 0; j < FIL; j++){
+                corte[j] = tablero.getPosicion(i, j);
             }
-            if(verifCorte(corte,6,turno))
-                victoria = true;
+            setVictoria(verifCorte(corte, FIL, turno));
         }
-        return victoria;
-    }
-
-    private boolean verifCorte (String[] corte,int tamanio, Turno turno){
-        boolean victoria = false;
-        int cont = 0;
-        for(int i=0; i<tamanio && !victoria; i++){
-            if(corte[i] == turno.getFichas()){
-                cont++;
-            }else
-                cont = 0;
-            if(cont == 4)
-                victoria = true;
-        }
-        return victoria;
+        return this.victoria;
     }
 
     /** haGanadoHorz
@@ -64,16 +48,14 @@ public class Victoria {
      * @return Un booleano si se cumple la condición o no.
      */
     private boolean haGanadoHor(Turno turno,Tablero tablero){
-        boolean victoria = false;
-        String[] corte = new String[7];
-        for(int i=0; i<FIL; i++){
-            for(int j=0; j<COL; j++){
-                corte[i].equals(tablero.getPosicion(i,j));
+        String[] corte = new String[COL];
+        for(int i=0; i < FIL-1 && !this.victoria; i++){
+            for(int j=0; j < COL-1; j++){
+                corte[j] = tablero.getPosicion(i,j);
             }
-            if(verifCorte(corte,7,turno))
-                victoria = true;
+            setVictoria(verifCorte(corte, COL, turno));
         }
-        return victoria;
+        return this.victoria;
     }
 
     /** haGanadoDiagDer
@@ -88,7 +70,7 @@ public class Victoria {
         String[] corte = new String[4];
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
-                corte[i].equals(tablero.getPosicion(i+j,j));
+                corte[i] = tablero.getPosicion(i+j,j);
             }
             if(verifCorte(corte,4,turno))
                 victoria = true;
@@ -108,9 +90,23 @@ public class Victoria {
         String[] corte = new String[4];
         for(int i=COL; i>2; i--){
             for(int j=0; j<3; j++){
-                corte[i].equals(tablero.getPosicion(i-j,j));
+                corte[i] = tablero.getPosicion(i-j,j);
             }
             if(verifCorte(corte,4,turno))
+                victoria = true;
+        }
+        return victoria;
+    }
+
+    private boolean verifCorte (String[] corte,int tamanio, Turno turno){
+        boolean victoria = false;
+        int cont = 0;
+        for(int i=0; i<tamanio && !victoria; i++){
+            if(corte[i] == turno.getFichas()){
+                cont++;
+            }else
+                cont = 0;
+            if(cont == 4)
                 victoria = true;
         }
         return victoria;
