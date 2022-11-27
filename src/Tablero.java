@@ -7,6 +7,9 @@ public class Tablero {
         this.tablero = new String[COL][FIL];
     }
 
+    /**
+     * Inicia el tablero a vacio (" ")
+     */
     public void iniciarTablero() {
         for(int i = 0; i < FIL; i++){
             for(int j = 0; j < COL; j++){
@@ -23,10 +26,22 @@ public class Tablero {
         return this.tablero[x][y];
     }
 
+    /**
+     * Introduce una ficha en la cola pasada como parámertro
+     * @param col columna del tablero en la que se introduce el valor
+     * @param valor "ficha" que se introduce
+     */
+
     public void ponerFicha(int col, String valor) {
         ponerFichaAux(col-1, 0, valor);
     }
 
+    /**
+     * Método recursivo en el que los valores/fichas se introducen en el tablero ("de arriba a abajo")
+     * @param col
+     * @param fila
+     * @param valor
+     */
     private void ponerFichaAux(int col, int fila, String valor) {
         if (tablero[col][fila].equals(" ") && fila < FIL - 1) {
             if(!tablero[col][fila+1].equals(" ")){
@@ -35,6 +50,9 @@ public class Tablero {
         }else tablero[col][fila] = valor;
     }
 
+    /**
+     * @return numero de espacios libres en el tablero
+     */
     public int ocupacion() {
         int libre = 0;
         for(int i = 0; i < FIL; i++){
@@ -47,15 +65,25 @@ public class Tablero {
         return libre;
     }
 
+    /**
+     * @return true si el tablero está lleno
+     */
     public boolean full() {
         return ocupacion() == 0;
     }
 
+    /**
+     * @param columna
+     * @return true si la columna está completa
+     */
     public boolean columnaLlena(int columna) {
         columna -= 1;
         return !tablero[columna][0].equals(" ");
     }
 
+    /**
+     * @return tablero por pantalla
+     */
     @Override
     public String toString() {
         String resultado = "";

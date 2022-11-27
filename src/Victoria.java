@@ -18,8 +18,14 @@ public class Victoria {
         this.victoria = v;
     }
 
+    /**
+     * Determina si se ha ganado la partida vertical, horizontal o diagonalmente
+     * @param turno turno en el que se ha introducdo la última ficha
+     * @param tablero tablero en sí
+     * @return true si se ha ganado
+     */
     public boolean haGanado(Turno turno,Tablero tablero) {
-        setVictoria(haGanadoVert(turno,tablero) ||  haGanadoHor(turno, tablero));// || haGanadoDiagDer(turno,tablero)) || haGanadoDiagIzq(turno,tablero));
+        setVictoria(haGanadoVert(turno,tablero) ||  haGanadoHor(turno, tablero) || haGanadoDiagIzq(turno,tablero));
         return victoria;
     }
 
@@ -65,23 +71,20 @@ public class Victoria {
      * @return Un booleano si se cumple la condición o no.
      */
 
-    private boolean haGanadoDiagDer(Turno turno,Tablero tablero) {
-    }
-
-    /*boolean victoria = false;
-    String[] corte = new String[4];
-        for(int i=0; i<4; i++){
-        for(int j=0; j<4; j++){
-            corte[i] = tablero.getPosicion(i+j,j);
+    /*private boolean haGanadoDiagDer(Turno turno,Tablero tablero) {
+        String[] corte = new String[];
+        for(int i = 3; i < && this.victoria; i++){
+            for(int j = 0; j < ; j++){
+                corte[j] = tablero.getPosicion();
+            }
+            setVictoria(verifCorte(corte, , turno));
         }
-        if(verifCorte(corte,4,turno))
-            victoria = true;
-    }
-        return victoria;*/
+    }*/
+
 
     /** haGanadoDiagIzq
      * VERIFICA LAS DIAGONALES TIPO / DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
-     * @param turno Determina cuál ficha verificar.
+     * @param turno Determina que ficha verificar.
      * @param tablero El tablero en sí
      * @return Un booleano si se cumple la condición o no.
      */
@@ -99,6 +102,13 @@ public class Victoria {
         return victoria;
     }
 
+    /**
+     * Verifica si hay cuatro mismos valores seguidos
+     * @param corte array
+     * @param tamanio tamaño del array corte
+     * @param turno turno que
+     * @return true si hay cuatro valores iguales seguidos
+     */
     private boolean verifCorte (String[] corte,int tamanio, Turno turno){
         boolean victoria = false;
         int cont = 0;

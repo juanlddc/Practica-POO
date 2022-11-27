@@ -10,7 +10,7 @@ public class Conecta4 {
     public final static Scanner scanner = new Scanner(System.in);
 
     public void jugar() throws ColumnaNoValida, ColumnaCompleta {
-        System.out.println("------ CONECTA 4 ------");
+        System.out.println("-------- CONECTA 4 --------");
         tablero.iniciarTablero();
         reiniciarV();
         System.out.println(tablero);
@@ -45,6 +45,9 @@ public class Conecta4 {
         }while(!tablero.full() && !victoria.getVictoria());
     }
 
+    /**
+     * Pone el valor de victoria a false para el caso en el que se vuelve a jugar
+     */
     public void reiniciarV() {
         this.victoria.setVictoria(false);
     }
