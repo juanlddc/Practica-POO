@@ -43,6 +43,7 @@ public class Conecta4 {
             turno.nextTurno();
 
         }while(!tablero.full() && !victoria.getVictoria());
+        if(!victoria.getVictoria()) System.out.println("TIED!!!");
     }
 
     /**

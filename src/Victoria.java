@@ -25,7 +25,7 @@ public class Victoria {
      * @return true si se ha ganado
      */
     public boolean haGanado(Turno turno,Tablero tablero) {
-        setVictoria(haGanadoVert(turno,tablero) ||  haGanadoHor(turno, tablero) || haGanadoDiagIzq(turno,tablero));
+        setVictoria(haGanadoVert(turno,tablero) ||  haGanadoHor(turno, tablero) || haGanadoDiagIzq(turno,tablero) || haGanadoDiagDer(turno,tablero));
         return victoria;
     }
 
@@ -71,35 +71,37 @@ public class Victoria {
      * @return Un booleano si se cumple la condición o no.
      */
 
-    /*private boolean haGanadoDiagDer(Turno turno,Tablero tablero) {
-        String[] corte = new String[];
-        for(int i = 3; i < && this.victoria; i++){
-            for(int j = 0; j < ; j++){
-                corte[j] = tablero.getPosicion();
+    private boolean haGanadoDiagDer(Turno turno,Tablero tablero){
+        String[] corte = new String[4];
+        for(int i = 0; (i < 4) && !verifCorte(corte,4,turno); i++){
+            for(int j = 0; (j < 3) && !verifCorte(corte,4,turno); j++){
+                for(int k = 0; k < 4; k++){
+                    corte[k] = tablero.getPosicion(i+k,j+k);
+                }
             }
-            setVictoria(verifCorte(corte, , turno));
         }
-    }*/
-
+        setVictoria(verifCorte(corte, 4, turno));
+        return this.victoria;
+    }
 
     /** haGanadoDiagIzq
      * VERIFICA LAS DIAGONALES TIPO / DEL TABLERO PARA LA CONDICIÓN DE VICTORIA
-     * @param turno Determina que ficha verificar.
+     * @param turno Determina cuál ficha verificar.
      * @param tablero El tablero en sí
      * @return Un booleano si se cumple la condición o no.
      */
 
     private boolean haGanadoDiagIzq(Turno turno,Tablero tablero){
-        boolean victoria = false;
         String[] corte = new String[4];
-        for(int i=COL; i>2; i--){
-            for(int j=0; j<3; j++){
-                corte[i] = tablero.getPosicion(i-j,j);
+        for(int i = 0; (i < 4) && !verifCorte(corte,4,turno); i++){
+            for(int j = 5; (j > 2) && !verifCorte(corte,4,turno); j--){
+                for(int k = 0; k < 4; k++){
+                    corte[k] = tablero.getPosicion(i+k,j-k);
+                }
             }
-            if(verifCorte(corte,4,turno))
-                victoria = true;
         }
-        return victoria;
+        setVictoria(verifCorte(corte, 4, turno));
+        return this.victoria;
     }
 
     /**
@@ -115,6 +117,7 @@ public class Victoria {
         for(int i=0; i<tamanio && !victoria; i++){
             if(corte[i] == turno.getFichas()){
                 cont++;
+
             }else
                 cont = 0;
             if(cont == 4)
