@@ -5,7 +5,7 @@ public class Conecta4 {
 
     private Tablero tablero = new Tablero();
     private Turno turno = new Turno();
-    private Victoria victoria = new Victoria();
+    private Reglas victoria = new Reglas();
     public final static Scanner sc = new Scanner(System.in);
     public final static Scanner scanner = new Scanner(System.in);
 
