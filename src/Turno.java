@@ -21,4 +21,9 @@ public class Turno {
     public String getFichas() {
         return fichas[this.turno];
     }
+
+    public String getFichaOpuesta() {
+        int turnoOp = (this.turno + 1)%2;
+        return fichas[turnoOp];
+    }
 }

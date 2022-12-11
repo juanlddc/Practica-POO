@@ -51,11 +51,9 @@ public class Conecta4 {
                 System.out.print(tablero);
                 System.out.println(" -----------------------------");
 
-                if(victoria.haGanado(turno, tablero)){
+                if(victoria.haGanado(turno.getFichas(), tablero)){
                     System.out.println("HA GANADO!!! " + turno.getJugador());
                 }
-
-                turno.nextTurno();
             }
             else if(mode.getModo() == "ENTRENAMIENTO"){ // Humano = RED , Máquina = YELLOW
                 int opcion = -1;
@@ -80,19 +78,17 @@ public class Conecta4 {
                     System.out.print(tablero);
                     System.out.println(" -----------------------------");
 
-                    if(victoria.haGanado(turno, tablero)){
+                    if(victoria.haGanado(turno.getFichas(), tablero)){
                         System.out.println("HA GANADO PLAYER!!! " + turno.getJugador());
                     }
-
-                    turno.nextTurno();
-
-                }else{
-                    MiniMax minMAX = new MiniMax(tablero,victoria);
+                }
+                else{
+                    MiniMax IA = new MiniMax(tablero,victoria);
                     System.out.println("Turn IA: " + turno.getJugador());
                     ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
                     System.out.println("Jugadas Validas: " + jugadasValidas);
-                    //opcion = minMAX.miniMax(tablero);
-                    System.out.println("Eleccion escogida por la IA: " + opcion);
+                    opcion = IA.miniMax(tablero, turno);
+                    System.out.println("Columna escogida por la IA: " + opcion);
 
                     tablero.ponerFicha(opcion, turno.getFichas());
 
@@ -100,16 +96,36 @@ public class Conecta4 {
                     System.out.print(tablero);
                     System.out.println(" -----------------------------");
 
-                    if(victoria.haGanado(turno, tablero)){
+                    if(victoria.haGanado(turno.getFichas(), tablero)){
                         System.out.println("HA GANADO IA!!! " + turno.getJugador());
                     }
-
-                    turno.nextTurno();
                 }
             }
             else{ //demo
-                System.out.println("Demo");
+                int opcion = -1;
+                int ident;
+                if(turno.getJugador().equals("RED")) ident = 1;
+                else ident = 2;
+
+                MiniMax IA = new MiniMax(tablero,victoria);
+
+                System.out.println("Turn IA" + ident + " " + turno.getJugador() + ":");
+                ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
+                System.out.println("Jugadas Validas: " + jugadasValidas);
+                opcion = IA.miniMax(tablero,turno);
+                System.out.println("Columna escogida por la IA" + ident + " " + turno.getJugador() + ": " + opcion);
+
+                tablero.ponerFicha(opcion, turno.getFichas());
+
+                System.out.println(" -----------------------------");
+                System.out.print(tablero);
+                System.out.println(" -----------------------------");
+
+                if(victoria.haGanado(turno.getFichas(), tablero)){
+                    System.out.println("HA GANADO IA" + ident + " " + turno.getJugador() + " !!!!");
+                }
             }
+            turno.nextTurno();
         }
         if(!victoria.getVictoria()) System.out.println("TIED!!!");
     }

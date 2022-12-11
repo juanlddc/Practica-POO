@@ -10,15 +10,15 @@ public class MiniMax {
         this.victoria = victoria;
     }
 
-    public int miniMax(Tablero tablero) {
+    public int miniMax(Tablero tablero, Turno turno) {
         int mejorJugada;
         int max = Integer.MIN_VALUE;
         int maxTmp;
         ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
         mejorJugada = jugadasValidas.get(0);
         for(Integer columna : jugadasValidas) {
-            tablero.ponerFicha(columna, "M");
-            maxTmp = valorMin(tablero,0);
+            tablero.ponerFicha(columna, turno.getFichas());
+            maxTmp = valorMin(tablero,0,turno);
             tablero.quitarFicha(columna);
             if(maxTmp > max) {
                 max = maxTmp;
@@ -28,16 +28,16 @@ public class MiniMax {
         return mejorJugada;
     }
 
-    private int valorMin(Tablero tablero, int prof) {
+    private int valorMin(Tablero tablero, int prof, Turno turno) {
         int min = Integer.MAX_VALUE;
         int minTmp;
-        if(hayFinPartida()) return heuristica(tablero);
-        if(prof > MAX_PROF) return heuristica(tablero);
+        if(hayFinPartida()) return heuristica(tablero,turno);
+        if(prof > MAX_PROF) return heuristica(tablero,turno);
         else{
             ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
             for(Integer columna : jugadasValidas) {
-                tablero.ponerFicha(columna, "H");
-                minTmp = valorMax(tablero,prof+1);
+                tablero.ponerFicha(columna, turno.getFichas());
+                minTmp = valorMax(tablero,prof+1,turno);
                 tablero.quitarFicha(columna);
                 if(minTmp < min) min = minTmp;
             }
@@ -45,16 +45,16 @@ public class MiniMax {
         }
     }
 
-    private int valorMax(Tablero tablero, int prof) {
+    private int valorMax(Tablero tablero, int prof, Turno turno) {
         int max = Integer.MIN_VALUE;
         int maxTmp;
-        if(hayFinPartida()) return heuristica(tablero);
-        if(prof > MAX_PROF) return heuristica(tablero);
+        if(hayFinPartida()) return heuristica(tablero,turno);
+        if(prof > MAX_PROF) return heuristica(tablero, turno);
         else{
             ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
             for(Integer columna : jugadasValidas) {
-                tablero.ponerFicha(columna, "M");
-                maxTmp = valorMax(tablero,prof+1);
+                tablero.ponerFicha(columna, turno.getFichas());
+                maxTmp = valorMax(tablero,prof+1, turno);
                 tablero.quitarFicha(columna);
                 if(maxTmp > max) max = maxTmp;
             }
@@ -62,11 +62,11 @@ public class MiniMax {
         }
     }
 
-    private int heuristica(Tablero tablero) {
-        if(victoria.haGanado(,tablero));
-        if(victoria.haGanado(,tablero));
+    private int heuristica(Tablero tablero, Turno turno) {
+        if(victoria.haGanado(turno.getFichas(), tablero)) return Integer.MAX_VALUE; //Player1
+        if(victoria.haGanado(turno.getFichaOpuesta(), tablero)) return Integer.MIN_VALUE; //Player2
         if;
-        return tablero.coste() - tablero.coste();
+        return tablero.coste(turno.getFichas()) - tablero.coste(turno.getFichaOpuesta()); //la ficha del otro jugador
     }
 
     private boolean hayFinPartida() {
