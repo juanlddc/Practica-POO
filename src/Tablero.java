@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class Tablero {
     private String[][] tablero;
     private final int COL = 7;
@@ -51,6 +54,20 @@ public class Tablero {
     }
 
     /**
+     * Elimina la ficha "más alta" de la columna introducida como parámetro
+     * @param col columna de la que se elimina la ficha
+     */
+    public void quitarFicha(int col) {
+        boolean borrado = false;
+        for(int i = 0; i < FIL && !borrado; i++){
+            if(!Objects.equals(tablero[col-1][i], " ")){
+                tablero[col-1][i] = " ";
+                borrado = true;
+            }
+        }
+    }
+
+    /**
      * @return numero de espacios libres en el tablero
      */
     public int ocupacion() {
@@ -80,6 +97,15 @@ public class Tablero {
         columna -= 1;
         return !tablero[columna][0].equals(" ");
     }
+
+    public ArrayList<Integer> getJugadasValidas() {
+        ArrayList<Integer> solucion = new ArrayList<Integer>();
+
+        return solucion;
+    }
+
+    //public int coste(String ficha) {
+    //}
 
     /**
      * @return tablero por pantalla
