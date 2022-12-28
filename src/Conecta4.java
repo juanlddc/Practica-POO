@@ -83,11 +83,9 @@ public class Conecta4 {
                     }
                 }
                 else{
-                    MiniMax IA = new MiniMax(tablero,victoria);
+                    MiniMax IA = new MiniMax(tablero);
                     System.out.println("Turn IA: " + turno.getJugador());
-                    ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
-                    System.out.println("Jugadas Validas: " + jugadasValidas);
-                    opcion = IA.miniMax(tablero, turno);
+                    opcion = IA.columna(turno);
                     System.out.println("Columna escogida por la IA: " + opcion);
 
                     tablero.ponerFicha(opcion, turno.getFichas());
@@ -107,12 +105,10 @@ public class Conecta4 {
                 if(turno.getJugador().equals("RED")) ident = 1;
                 else ident = 2;
 
-                MiniMax IA = new MiniMax(tablero,victoria);
+                MiniMax IA = new MiniMax(tablero);
 
                 System.out.println("Turn IA" + ident + " " + turno.getJugador() + ":");
-                ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
-                System.out.println("Jugadas Validas: " + jugadasValidas);
-                opcion = IA.miniMax(tablero,turno);
+                opcion = IA.columna(turno);
                 System.out.println("Columna escogida por la IA" + ident + " " + turno.getJugador() + ": " + opcion);
 
                 tablero.ponerFicha(opcion, turno.getFichas());

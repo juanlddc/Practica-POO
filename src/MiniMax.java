@@ -1,75 +1,98 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MiniMax {
-    private final int MAX_PROF = 0;
+
+    private final int COL = 7;
+    private final int FIL = 6;
     private Tablero tablero;
-    private Reglas victoria;
 
-    public MiniMax(Tablero tablero, Reglas victoria) {
+    public MiniMax(Tablero tablero) {
         this.tablero = tablero;
-        this.victoria = victoria;
     }
 
-    public int miniMax(Tablero tablero, Turno turno) {
-        int mejorJugada;
-        int max = Integer.MIN_VALUE;
-        int maxTmp;
-        ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
-        mejorJugada = jugadasValidas.get(0);
-        for(Integer columna : jugadasValidas) {
-            tablero.ponerFicha(columna, turno.getFichas());
-            maxTmp = valorMin(tablero,0,turno);
-            tablero.quitarFicha(columna);
-            if(maxTmp > max) {
-                max = maxTmp;
-                mejorJugada = columna;
+    public int columna(Turno turno){
+        Random r = new Random();
+        int col = r.nextInt(COL);
+        while(tablero.columnaLlena(col+1)){
+            col = r.nextInt(COL);
+        }
+        return col+1;
+    }
+
+    /*public int mejor(Turno turno) {
+        int[] coste1 = coste(turno.getFichas());
+        int[] coste2 = coste(turno.getFichaOpuesta());
+
+        if(coste1[1] > coste2[1]) return coste1[0];
+        else return coste2[0];
+    }
+    public int[] coste(String ficha){
+        /*int[] v = costeVer(ficha);
+        int[] h = costeHor(ficha);
+        if(v[1] > h[1]) return v;
+        else return h;
+        return costeVer(ficha);
+    }
+
+    private int[] costeVer(String ficha){
+        String[] corte = new String[FIL];
+        int[] columnaYvalor = {-1,0};
+
+        int linea = 0;
+
+        for(int i = 1; i < COL+1 && !tablero.columnaLlena(i); i++){
+            tablero.ponerFicha(i, ficha);
+            for(int j = 0; j < FIL; j++){
+                corte[j] = tablero.getPosicion(i-1,j);
+            }
+            tablero.quitarFicha(i);
+            linea = fichasEnLinea(corte, ficha);
+
+            if(linea > columnaYvalor[1]){
+                columnaYvalor[1] = linea;
+                columnaYvalor[0] = i;
             }
         }
-        return mejorJugada;
+        return columnaYvalor;
     }
+    private int[] costeHor(String ficha){
+        String[] corte = new String[COL];
+        int[] columnaYvalor = {-1,0};
 
-    private int valorMin(Tablero tablero, int prof, Turno turno) {
-        int min = Integer.MAX_VALUE;
-        int minTmp;
-        if(hayFinPartida()) return heuristica(tablero,turno);
-        if(prof > MAX_PROF) return heuristica(tablero,turno);
-        else{
-            ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
-            for(Integer columna : jugadasValidas) {
-                tablero.ponerFicha(columna, turno.getFichas());
-                minTmp = valorMax(tablero,prof+1,turno);
-                tablero.quitarFicha(columna);
-                if(minTmp < min) min = minTmp;
+        int linea = 0;
+        int posicion = 0;
+
+        for(int i = 1; i < COL+1 && !tablero.columnaLlena(i); i++){
+            tablero.ponerFicha(i, ficha);
+            for(int z = 0; tablero.getPosicion(i-1,z).equals(" ") && z < FIL; z++){
+                posicion++;
             }
-            return min;
-        }
-    }
+            posicion += 1; //fila ficha metida
 
-    private int valorMax(Tablero tablero, int prof, Turno turno) {
-        int max = Integer.MIN_VALUE;
-        int maxTmp;
-        if(hayFinPartida()) return heuristica(tablero,turno);
-        if(prof > MAX_PROF) return heuristica(tablero, turno);
-        else{
-            ArrayList<Integer> jugadasValidas = tablero.getJugadasValidas();
-            for(Integer columna : jugadasValidas) {
-                tablero.ponerFicha(columna, turno.getFichas());
-                maxTmp = valorMax(tablero,prof+1, turno);
-                tablero.quitarFicha(columna);
-                if(maxTmp > max) max = maxTmp;
+            for(int j = 0; j < COL; j++){
+                corte[j] = tablero.getPosicion(j, posicion);
             }
-            return max;
+            tablero.quitarFicha(i);
+            linea = fichasEnLinea(corte,ficha);
+
+            if(linea > columnaYvalor[1]){
+                columnaYvalor[1] = linea;
+                columnaYvalor[0] = i;
+            }
         }
+        return columnaYvalor;
     }
 
-    private int heuristica(Tablero tablero, Turno turno) {
-        if(victoria.haGanado(turno.getFichas(), tablero)) return Integer.MAX_VALUE; //Player1
-        if(victoria.haGanado(turno.getFichaOpuesta(), tablero)) return Integer.MIN_VALUE; //Player2
-        if;
-        return tablero.coste(turno.getFichas()) - tablero.coste(turno.getFichaOpuesta()); //la ficha del otro jugador
-    }
+    private int fichasEnLinea(String[] corte, String ficha){
+        int cont = 0;
 
-    private boolean hayFinPartida() {
-        return victoria.getVictoria() || tablero.full();
-    }
+        for(int i = 0; i < corte.length; i++){
+            if(corte[i] != " "){
+                if(corte[i] == ficha) cont++;
+                else cont = 0;
+            }
+        }
+        return cont;
+    }*/
 }

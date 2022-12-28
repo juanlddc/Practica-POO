@@ -104,9 +104,6 @@ public class Tablero {
         return solucion;
     }
 
-    public int coste(String ficha) {
-    }
-
     /**
      * @return tablero por pantalla
      */
