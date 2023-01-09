@@ -1,139 +1,116 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Conecta4 {
 
-    private Tablero tablero = new Tablero();
     private Turno turno = new Turno();
-    private Reglas victoria = new Reglas();
-    private Modos mode = new Modos();
+    private Reglas reglas = new Reglas();
+    private Jugador[] jugadores = new Jugador[2];
+    public final static Scanner col = new Scanner(System.in);
+    public final static Scanner fil = new Scanner(System.in);
+    public final static Scanner repetir = new Scanner(System.in);
     public final static Scanner m = new Scanner(System.in);
-    public final static Scanner sc = new Scanner(System.in);
     public final static Scanner scanner = new Scanner(System.in);
 
-    public void jugar() throws ColumnaNoValida, ColumnaCompleta {
+    public void jugar() throws NumeroNoValido {
         System.out.println("-------- CONECTA 4 --------");
-        tablero.iniciarTablero();
-        reiniciarV();
-        int modo;
-        System.out.println("Elija un modo de juego: (1)Basico | (2)Entrenamiento | (3)Demo");
+        int filas = 0;
+        int columnas = 0;
+        boolean successful = false;
+        String rep;
         do{
-            modo = m.nextInt();
-            if(modo != 1 && modo != 2 && modo != 3) System.out.println("Invalid number! Values[1-3]");
-        }while(modo != 1 && modo != 2 && modo != 3);
-
-        mode.setModo(modo-1);
-        System.out.println("Modo -> " + mode.getModo());
-
-        System.out.println(tablero);
-
-        while(!tablero.full() && !victoria.getVictoria()){
-            if(mode.getModo() == "BASICO"){
-                int columna;
-                do{
-                    System.out.println("Turn: " + turno.getJugador());
-                    System.out.print("Enter a column to drop a token: ");
-                    columna = sc.nextInt();
-                    if(columna < 1 || columna > 7){
-                        //throw new ColumnaNoValida();
-                        System.out.println("Invalid column! Values[1-7]");
-                    }
-                    if(tablero.columnaLlena(columna)){
-                        //throw new ColumnaCompleta();
-                        System.out.println("Invalid column! Its completed");
-                    }
-                }while((columna < 1 || columna > 7) || tablero.columnaLlena(columna));
-
-                tablero.ponerFicha(columna, turno.getFichas());
-
-                System.out.println(" -----------------------------");
-                System.out.print(tablero);
-                System.out.println(" -----------------------------");
-
-                if(victoria.haGanado(turno.getFichas(), tablero)){
-                    System.out.println("HA GANADO!!! " + turno.getJugador());
+            try{
+                System.out.println("Numero de columnas del tablero? [4-etc]");
+                columnas = col.nextInt();
+                System.out.println("Numero de filas del tablero? [4-etc]");
+                filas = fil.nextInt();
+                if(columnas < 4 || filas < 4){
+                    throw new NumeroNoValido();
                 }
+                successful = true;
+            }catch(NumeroNoValido e){
+                System.out.println(e.getMensaje());
             }
-            else if(mode.getModo() == "ENTRENAMIENTO"){ // Humano = RED , Máquina = YELLOW
-                int opcion = -1;
-                if(turno.getJugador().equals("RED")){
-                    do{
-                        System.out.println("Turn PLAYER: " + turno.getJugador());
-                        System.out.print("Enter a column to drop a token: ");
-                        opcion = sc.nextInt();
-                        if(opcion < 1 || opcion > 7){
-                            //throw new ColumnaNoValida();
-                            System.out.println("Invalid column! Values[1-7]");
-                        }
-                        if(tablero.columnaLlena(opcion)){
-                            //throw new ColumnaCompleta();
-                            System.out.println("Invalid column! Its completed");
-                        }
-                    }while((opcion < 1 || opcion > 7) || tablero.columnaLlena(opcion));
+        }while(!successful);
 
-                    tablero.ponerFicha(opcion, turno.getFichas());
+        Tablero tablero = new Tablero(columnas, filas);
+        turno.setTurno(0);
+        reiniciarV();
+        tablero.iniciarTablero();
+        int modo = 1;
 
-                    System.out.println(" -----------------------------");
-                    System.out.print(tablero);
-                    System.out.println(" -----------------------------");
+        successful = false;
+        do {
+            try {
+                System.out.print("Elija un modo de juego:\n" +
+                        "(1)Básico\n" +
+                        "(2)Entrenamiento\n" +
+                        "(3)Demo\n" +
+                        "(0)Salir del juego\n");
+                modo = m.nextInt();
+                if (modo < 0 || modo > 3) {
+                    throw new NumeroNoValido();
+                }
+                successful = true;
+            } catch (NumeroNoValido e) {
+                System.out.println(e.getMensaje() + " Values[0-3]");
+            }
+        }while(!successful);
 
-                    if(victoria.haGanado(turno.getFichas(), tablero)){
-                        System.out.println("HA GANADO PLAYER!!! " + turno.getJugador());
+        if (modo != 0) {
+            switch (modo) {
+                case 1:
+                    jugadores[0] = new JugadorHumano("R","RED");
+                    jugadores[1] = new JugadorHumano("Y","YELLOW");
+                    break;
+                case 2:
+                    jugadores[0] = new JugadorHumano("R","RED");
+                    jugadores[1] = new JugadorIA("Y","YELLOW");
+                    break;
+                case 3:
+                    jugadores[0] = new JugadorIA("R","RED");
+                    jugadores[1] = new JugadorIA("Y","YELLOW");
+                    break;
+            }
+            do {
+                System.out.println(tablero);
+                tablero.makeBackup();
+                System.out.println(jugadores[turno.getTurno()].getNombre()+" player's turn:");
+                tablero.ponerFicha(jugadores[turno.getTurno()].escogerPosicion(tablero),jugadores[turno.getTurno()].getFicha());
+                System.out.println(tablero);
+                if (jugadores[turno.getTurno()].getClass().equals(JugadorHumano.class)){
+                    System.out.println("Repetir movimiento ? (s/n)");
+                    rep = repetir.nextLine();
+                    if(rep.equals("s")){
+                        tablero.recoverBackup();
+                        System.out.println(tablero);
+                        tablero.ponerFicha(jugadores[turno.getTurno()].escogerPosicion(tablero),jugadores[turno.getTurno()].getFicha());
                     }
                 }
-                else{
-                    MiniMax IA = new MiniMax(tablero);
-                    System.out.println("Turn IA: " + turno.getJugador());
-                    opcion = IA.columna(turno);
-                    System.out.println("Columna escogida por la IA: " + opcion);
 
-                    tablero.ponerFicha(opcion, turno.getFichas());
-
-                    System.out.println(" -----------------------------");
-                    System.out.print(tablero);
-                    System.out.println(" -----------------------------");
-
-                    if(victoria.haGanado(turno.getFichas(), tablero)){
-                        System.out.println("HA GANADO IA!!! " + turno.getJugador());
-                    }
+                if(!reglas.getVictoria() && tablero.full()){
+                    System.out.println("It's a tie! Game over.");
+                }else if(reglas.haGanado(jugadores[turno.getTurno()].getFicha(),tablero)){
+                    System.out.println(tablero);
+                    System.out.println(jugadores[turno.getTurno()].getNombre()+" has won! Game over.");
+                }else{
+                    turno.nextTurno();
                 }
-            }
-            else{ //demo
-                int opcion = -1;
-                int ident;
-                if(turno.getJugador().equals("RED")) ident = 1;
-                else ident = 2;
-
-                MiniMax IA = new MiniMax(tablero);
-
-                System.out.println("Turn IA" + ident + " " + turno.getJugador() + ":");
-                opcion = IA.columna(turno);
-                System.out.println("Columna escogida por la IA" + ident + " " + turno.getJugador() + ": " + opcion);
-
-                tablero.ponerFicha(opcion, turno.getFichas());
-
-                System.out.println(" -----------------------------");
-                System.out.print(tablero);
-                System.out.println(" -----------------------------");
-
-                if(victoria.haGanado(turno.getFichas(), tablero)){
-                    System.out.println("HA GANADO IA" + ident + " " + turno.getJugador() + " !!!!");
-                }
-            }
-            turno.nextTurno();
+            } while (!tablero.full() && !reglas.getVictoria());
         }
-        if(!victoria.getVictoria()) System.out.println("TIED!!!");
     }
 
     /**
      * Pone el valor de victoria a false para el caso en el que se vuelve a jugar
      */
+
     public void reiniciarV() {
-        this.victoria.setVictoria(false);
+        this.reglas.setVictoria(false);
     }
 
-    public static void main(String[] args) throws ColumnaCompleta, ColumnaNoValida {
+    public static void main(String[] args) throws NumeroNoValido {
         Conecta4 partida = new Conecta4();
         String seguir;
         do{

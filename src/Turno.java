@@ -1,29 +1,21 @@
 public class Turno {
-    private static final String[] jugadores = {"RED","YELLOW"};
-    private static final String[] fichas = {"R","Y"};
     private int turno;
+    private int numJugadores;
+
     public Turno(){
         turno = 0;
+        numJugadores = 2;
     }
 
     public void nextTurno(){
-        turno = (turno + 1)%2;
+        turno = (turno + 1)%numJugadores;
     }
 
     public int getTurno() {
         return turno;
     }
 
-    public String getJugador(){
-        return jugadores[this.turno];
-    }
-
-    public String getFichas() {
-        return fichas[this.turno];
-    }
-
-    public String getFichaOpuesta() {
-        int turnoOp = (this.turno + 1)%2;
-        return fichas[turnoOp];
+    public void setTurno(int turno){
+        this.turno = turno % numJugadores;
     }
 }
