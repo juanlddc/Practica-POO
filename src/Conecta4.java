@@ -1,64 +1,22 @@
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Conecta4 {
 
-    private Turno turno = new Turno();
-    private Reglas reglas = new Reglas();
-    private Jugador[] jugadores = new Jugador[2];
-    public final static Scanner col = new Scanner(System.in);
-    public final static Scanner fil = new Scanner(System.in);
+    private final Turno turno = new Turno();
+    private final Reglas reglas = new Reglas();
+    private final Jugador[] jugadores = new Jugador[2];
+    private final Menu menu = new Menu();
     public final static Scanner repetir = new Scanner(System.in);
-    public final static Scanner m = new Scanner(System.in);
     public final static Scanner scanner = new Scanner(System.in);
 
     public void jugar() throws NumeroNoValido {
         System.out.println("-------- CONECTA 4 --------");
-        int filas = 0;
-        int columnas = 0;
-        boolean successful = false;
         String rep;
-        do{
-            try{
-                System.out.println("Numero de columnas del tablero? [4-etc]");
-                columnas = col.nextInt();
-                System.out.println("Numero de filas del tablero? [4-etc]");
-                filas = fil.nextInt();
-                if(columnas < 4 || filas < 4){
-                    throw new NumeroNoValido();
-                }
-                successful = true;
-            }catch(NumeroNoValido e){
-                System.out.println(e.getMensaje());
-            }
-        }while(!successful);
-
-        Tablero tablero = new Tablero(columnas, filas);
+        Tablero tablero = new Tablero(menu.pedirCol(), menu.pedirFil());
         turno.setTurno(0);
         reiniciarV();
         tablero.iniciarTablero();
-        int modo = 1;
-
-        successful = false;
-        do {
-            try {
-                System.out.print("Elija un modo de juego:\n" +
-                        "(1)Básico\n" +
-                        "(2)Entrenamiento\n" +
-                        "(3)Demo\n" +
-                        "(0)Salir del juego\n");
-                modo = m.nextInt();
-                if (modo < 0 || modo > 3) {
-                    throw new NumeroNoValido();
-                }
-                successful = true;
-            } catch (NumeroNoValido e) {
-                System.out.println(e.getMensaje() + " Values[0-3]");
-            }
-        }while(!successful);
-
+        int modo = menu.selModo();
         if (modo != 0) {
             switch (modo) {
                 case 1:
@@ -81,7 +39,7 @@ public class Conecta4 {
                 tablero.ponerFicha(jugadores[turno.getTurno()].escogerPosicion(tablero),jugadores[turno.getTurno()].getFicha());
                 System.out.println(tablero);
                 if (jugadores[turno.getTurno()].getClass().equals(JugadorHumano.class)){
-                    System.out.println("Repetir movimiento ? (s/n)");
+                    System.out.println("Undo move? (s/n)");
                     rep = repetir.nextLine();
                     if(rep.equals("s")){
                         tablero.recoverBackup();
@@ -105,7 +63,6 @@ public class Conecta4 {
     /**
      * Pone el valor de victoria a false para el caso en el que se vuelve a jugar
      */
-
     public void reiniciarV() {
         this.reglas.setVictoria(false);
     }
@@ -119,7 +76,7 @@ public class Conecta4 {
                 System.out.print("Do you want to continue? (s/n): ");
                 seguir = scanner.nextLine();
                 System.out.println("\n");
-            }while(!Objects.equals(seguir, "S") && !Objects.equals(seguir, "s") && !Objects.equals(seguir, "N") && !Objects.equals(seguir, "n"));
+            }while(!seguir.equals("S") && !seguir.equals("s") && !seguir.equals("N") && !seguir.equals("n"));
         }while(seguir.equals("S") || seguir.equals("s"));
     }
 }
